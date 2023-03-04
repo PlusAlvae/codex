@@ -11,6 +11,7 @@ export default {
   
     // configure plugins
     plugins: [ VitePWA({
+      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
       registerType: 'autoUpdate',
       injectRegister: 'auto',
       manifest: {
@@ -28,7 +29,14 @@ export default {
             src: 'pwa-512x512.png',
             sizes: '512x512',
             type: 'image/png'
-          }]}
+          },
+          {
+            src: 'pwa-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'any maskable'
+          }
+        ]}
     })],
   
     // set up a proxy server for API requests
