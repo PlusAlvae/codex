@@ -13,6 +13,9 @@ export default {
     plugins: [ VitePWA({
       
       registerType: 'autoUpdate',
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg}']
+      },
       injectRegister: 'auto',
       manifest: {
         name: 'My Awesome App',
@@ -21,9 +24,14 @@ export default {
         theme_color: '#ffffff',
         icons: [
           {
-            src: "/images/logo.png",
-            type: "image/png",
-            sizes: "1024x1024"
+            src: 'pwa-192x192.png',
+            sizes: '192x192',
+            type: 'image/png'
+          },
+          {
+            src: 'pwa-512x512.png',
+            sizes: '512x512',
+            type: 'image/png'
           }
         ]}
     })],
