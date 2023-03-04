@@ -11,7 +11,7 @@ export default {
   
     // configure plugins
     plugins: [ VitePWA({
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
+      includeAssets: [ 'apple-touch-icon.png'],
       registerType: 'autoUpdate',
       injectRegister: 'auto',
       manifest: {
