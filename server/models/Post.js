@@ -1,0 +1,11 @@
+import mongoose from "mongoose";
+
+const postSchema = new mongoose.Schema({
+    post: {
+        type: String,
+        required: true,
+    }}
+);
+
+const Post = mongoose.model("Post", postSchema);
+export default Post;

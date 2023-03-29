@@ -2,6 +2,9 @@ import express from 'express'
 import * as dotenv from 'dotenv'
 import cors from 'cors'
 import { Configuration, OpenAIApi } from 'openai'
+import mongoose from 'mongoose'
+import postRoutes from './routes/posts.js'
+import { createPost } from './controllers/posts.js'
 
 dotenv.config()
 
@@ -14,6 +17,7 @@ const openai = new OpenAIApi(configuration);
 const app = express()
 app.use(cors())
 app.use(express.json())
+
 
 app.get('/', async (req, res) => {
   res.status(200).send({
@@ -57,4 +61,20 @@ app.post('/', async (req, res) => {
   }
 })
 
-app.listen(5000, () => console.log('AI server started on http://localhost:5000'))
+app.post("/", createPost)
+
+mongoose.set("strictQuery", true);
+const PORT = process.env.PORT || 6001;
+mongoose
+  .connect(process.env.MONGO_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
+
+   /* ADD DATA ONE TIME */
+/*     User.insertMany(users);
+    Post.insertMany(posts);  */
+  })
+  .catch((error) => console.log(`${error} did not connect`));
