@@ -4,7 +4,7 @@ import cors from 'cors'
 import { Configuration, OpenAIApi } from 'openai'
 import mongoose from 'mongoose'
 import postRoutes from './routes/posts.js'
-import { createPost } from './controllers/posts.js'
+import Post from "./models/Post.js";
 
 dotenv.config()
 
@@ -28,7 +28,8 @@ app.get('/', async (req, res) => {
 app.post('/', async (req, res) => {
   try {
     const prompt = req.body.prompt;
-
+    console.log(prompt)
+    console.log(typeof prompt)
     const response1 = await openai.createCompletion({
       model: "text-davinci-003",
       prompt: `Explain which emotions I am feeling in this text, in 150 to 200 words: ${prompt}`,
@@ -38,8 +39,6 @@ app.post('/', async (req, res) => {
       frequency_penalty: 0.5, // Number between -2.0 and 2.0. Positive values penalize new tokens based on their existing frequency in the text so far, decreasing the model's likelihood to repeat the same line verbatim.
       presence_penalty: 0, // Numbers between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics.
     });
-
-    
     const response2 = await openai.createCompletion({
       model: "text-davinci-003",
       prompt: `Write this text in second person narrator: ${response1.data.choices[0].text}`,
@@ -49,11 +48,18 @@ app.post('/', async (req, res) => {
       frequency_penalty: 0.5, // Number between -2.0 and 2.0. Positive values penalize new tokens based on their existing frequency in the text so far, decreasing the model's likelihood to repeat the same line verbatim.
       presence_penalty: 0, // Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics.
     });
-  
-
+    console.log("reached")
+    const data = req.body.prompt;
+    const newPost = new Post({
+      post: data
+    });
+    await newPost.save();
+    console.log("saved")
     res.status(200).send({
       bot: response2.data.choices[0].text
     });
+
+    
 
   } catch (error) {
     console.error(error)
@@ -61,7 +67,6 @@ app.post('/', async (req, res) => {
   }
 })
 
-app.post("/", createPost)
 
 mongoose.set("strictQuery", true);
 const PORT = process.env.PORT || 6001;
@@ -78,3 +83,5 @@ mongoose
     Post.insertMany(posts);  */
   })
   .catch((error) => console.log(`${error} did not connect`));
+
+  app.use("/", postRoutes)  

@@ -4,6 +4,6 @@ import { createPost} from "../controllers/posts.js";
 const router = express.Router();
 
 
-router.post("/prompt", createPost);
+router.post("/", createPost);
 
 export default router;
