@@ -3,7 +3,6 @@ import * as dotenv from 'dotenv'
 import cors from 'cors'
 import { Configuration, OpenAIApi } from 'openai'
 import mongoose from 'mongoose'
-import postRoutes from './routes/posts.js'
 import Post from "./models/Post.js";
 
 dotenv.config()
@@ -83,5 +82,3 @@ mongoose
     Post.insertMany(posts);  */
   })
   .catch((error) => console.log(`${error} did not connect`));
-
-  app.use("/", postRoutes)  
